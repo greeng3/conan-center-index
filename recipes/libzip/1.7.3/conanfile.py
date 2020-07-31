@@ -86,9 +86,8 @@ class LibZipConan(ConanFile):
             tools.replace_in_file(cmake_file, "MBEDTLS_LIBRARIES", "CONAN_LIBS_MBEDTLS")
 
     def build(self):
-        if "patches" in self.conan_data and self.version in self.conan_data["patches"]:
-            for patch in self.conan_data["patches"][self.version]:
-                tools.patch(**patch)
+        for patch in self.conan_data.get("patches", {}).get(self.version, []):
+            tools.patch(**patch)
         self.exclude_targets()
         cmake = self._configure_cmake()
         cmake.build()
