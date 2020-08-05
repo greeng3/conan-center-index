@@ -32,8 +32,8 @@ class LibZipConan(ConanFile):
         "shared": False,
         "fPIC": True,
         "with_bzip2": True,
-        "with_mbedtls": True,
-        "with_openssl": False,
+        "with_mbedtls": False,
+        "with_openssl": True,
         "enable_windows_crypto": True,
     }
 
@@ -53,7 +53,7 @@ class LibZipConan(ConanFile):
         if self.options.with_bzip2:
             self.requires("bzip2/1.0.8")
         if self.options.with_openssl:
-            self.requires("openssl/1.0.2t")
+            self.requires("openssl/1.1.1g")
         if self.options.with_mbedtls:
             self.requires("mbedtls/2.23.0-apache@ggreene/test")
 
@@ -80,10 +80,10 @@ class LibZipConan(ConanFile):
                 tools.replace_in_file(cmake_file, "ADD_SUBDIRECTORY(%s)" % target, "")
             except ConanException:
                 tools.replace_in_file(cmake_file, "add_subdirectory(%s)" % target, "")
-        if self.options.with_openssl:
-            tools.replace_in_file(cmake_file, "OPENSSL_LIBRARIES", "CONAN_LIBS_OPENSSL")
-        if self.options.with_mbedtls:
-            tools.replace_in_file(cmake_file, "MBEDTLS_LIBRARIES", "CONAN_LIBS_MBEDTLS")
+        # if self.options.with_openssl:
+        #     tools.replace_in_file(cmake_file, "OPENSSL_LIBRARIES", "CONAN_LIBS_OPENSSL")
+        # if self.options.with_mbedtls:
+        #     tools.replace_in_file(cmake_file, "MBEDTLS_LIBRARIES", "CONAN_LIBS_MBEDTLS")
 
     def build(self):
         for patch in self.conan_data.get("patches", {}).get(self.version, []):
